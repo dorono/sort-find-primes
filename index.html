@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Number Array Fun</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <style>
+            body {
+                font-size: 30px;
+                font-family: Arial;
+            }
+            main {
+                width: 900px;
+            }
+            h2 {
+                font-size: 25px;
+                line-height: 1;
+                padding: 0 0 10px;
+                margin: 0;
+            }
+            #random-arrays {
+                font-size: 19px;
+            }
+            label {
+                display: block;
+                margin: 0 0 20px;
+                font-size: 25px;
+                clear: both;
+                width: 300px;
+            }
+            section {
+                border: 3px dotted green;
+                margin: 0 0 20px;
+                overflow: scroll;
+                max-height: 400px
+            }
+            fieldset {
+                margin: 0 0 30px;
+            }
+            input {
+                font-size: 30px;
+                font-weight: bold;
+                padding: 10px;
+            }
+            legend {
+                font-weight: bold;
+            }
+        </style>
+
+    </head>
+    <body>
+
+        <main>
+            <fieldset>
+                <legend>Enter High and Low Numbers</legend>
+
+                <label>
+                    Enter Low Number
+                    <input type="number" id="low-num" name="low-num" />
+                </label>
+
+                <label>
+                    Enter High Number
+                    <input type="text" id="high-num" name="high-num" />
+                </label>
+
+                <button id="submit">Sort Me and Give Me Primes!</button>
+            </fieldset>
+
+            <h2>List of Arrays Sorting Themselves Out</h2>
+
+            <section id="random-arrays">
+                <ul id="sorting-list"></ul>
+            </section>
+
+            <h2>Prime Array</h2>
+
+            <section id="prime-array"></section>
+        </main>
+
+
+        <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+        <script>
+            function superSorter(){
+
+                var madeSwap,
+                beenSorted = false,
+                sortedArray = [];
+
+                this.submitNums = function(){
+                    var lowNum = $("#low-num").val(),
+                    highNum = $("#high-num").val();
+
+                    // check to make sure that it's actually numbers that are being entered
+                    if(isNaN(parseInt(lowNum)) || isNaN(parseInt(highNum))) {
+                        alert("Please make sure the both entries are numbers");
+                    } else {
+                        lowNum = Number(lowNum),
+                        highNum = Number(highNum);
+                    }
+
+                    if(beenSorted) {
+                        $("ul#sorting-list li").remove();
+                        $("#prime-array").empty();
+                    } else {
+                        beenSorted = true;
+                    }
+                    sortIt(lowNum,highNum);
+                }
+
+                function sortIt(low,high) {
+                    // if the user accidentally enters the high ber into the low number
+                    // box, or vice versa, flip the numbers
+                    if(low > high) {
+                        var placeHolder = low;
+                        low = high;
+                        high = placeHolder;
+                    }
+
+                    // get the difference between the low and high numbers,
+                    // which will determine the length of the array (+1 to allow
+                    // for the top number itself
+                    var delta = high - low + 1,
+                    randomArray = [];
+
+                    // loop through the delta and get all of the random numbers,
+                    // boosting each number by the low so that we're getting
+                    // the exact range specified by the user input
+                    while(randomArray.length < Number(delta)){
+                        var randomArrayItem = Math.floor(Math.random() * delta);
+                        randomArrayItem = Number(randomArrayItem) + Number(low);
+                        if(randomArray.indexOf(randomArrayItem) < 0){
+                            randomArray.push(randomArrayItem);
+                        }
+                    }
+
+                    // loop through once for every array element
+                    for(var i = 0, len = randomArray.length, placeholder; i < len; i++){
+                        $('#random-arrays ul').append("<li>" + randomArray + "</li>");
+
+                        // this variable keeps track of whether or not a swap was made
+                        madeSwap = false;
+
+                        // For each item in array, compare every number to the one after it.
+                        // Stop comparing after the counter(j) reaches the total number of array
+                        // items that have been compared.
+                        for (var j = 0, endIndex = len - i; j < endIndex; j++) {
+                            // this is the swapping process that compares
+                            // every two numbers to each other
+                            if(randomArray[j] > randomArray[j + 1]){
+                                placeholder = randomArray[j];
+                                randomArray[j] = randomArray[j + 1];
+                                randomArray[j + 1] = placeholder;
+                                madeSwap = true;
+                            }
+                        }
+
+                        // once we're no longer swapping numbers, then exit the outer loop
+                        if(!madeSwap) {
+                            break;
+                        }
+
+                    // copy this array to an array with a name that will make the code
+                    // more understandable
+                    sortedArray = randomArray;
+                    }
+
+                    // call the function (below) to get the array of prime numbers
+                    findPrime();
+
+                    // gets a list of prime numbers from the user's range of numbers
+                    function findPrime(){
+
+                        // declare & initialize the prime array,
+                        // we don't want any old values in here!
+                        var primeArray = [],
+                        isPrime;
+
+                        for(j in sortedArray){
+                            // if this number is 0 or 1, then right off the bat
+                            // we know that it's either not a number (0), or not prime (1)
+                            if(sortedArray[j] < 1){
+                                return false
+                            }
+                            // if this number is not an integer, then it is not a prime
+                            // number
+                            if(sortedArray[j] != Math.round(sortedArray[j])) {
+                                return false;
+                            }
+                            // so now that we passed the first 2 tests, we are true...
+                            // for the time being!
+                            isPrime = true;
+                            // check every number from 2 to the square root to make sure that
+                            // none of these are cleanly divided by another number
+                            for(var k = 2; k <= Math.sqrt(sortedArray[j]); k++){
+                                if(sortedArray[j] % k == 0){
+                                    isPrime = false;
+                                }
+                            }
+                            // at this point, after that last test, if we're still prime, then
+                            // push this number into the array
+                            if(isPrime) {
+                                primeArray.push(sortedArray[j]);
+                            }
+                        }
+                        // insert the prime array into the DOM
+                        $("#prime-array").text(primeArray);
+                    }
+                }
+            }
+
+            var doronsBubbleSort = new superSorter();
+            $("#submit").on('click', function(){
+                doronsBubbleSort.submitNums();
+            });
+
+        </script>
+
+    </body>
+</html>
