@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -12,18 +12,24 @@
                 font-size: 30px;
                 font-family: Arial;
             }
-            main {
-                width: 900px;
-            }
+
             h2 {
                 font-size: 25px;
                 line-height: 1;
                 padding: 0 0 10px;
                 margin: 0;
             }
-            #random-arrays {
-                font-size: 19px;
+
+            fieldset {
+                margin: 0 0 30px;
             }
+
+            input {
+                font-size: 30px;
+                font-weight: bold;
+                padding: 10px;
+            }
+
             label {
                 display: block;
                 margin: 0 0 20px;
@@ -31,22 +37,24 @@
                 clear: both;
                 width: 300px;
             }
+
+            legend {
+                font-weight: bold;
+            }
+
+            main {
+                width: 900px;
+            }
+
             section {
                 border: 3px dotted green;
                 margin: 0 0 20px;
                 overflow: scroll;
                 max-height: 400px
             }
-            fieldset {
-                margin: 0 0 30px;
-            }
-            input {
-                font-size: 30px;
-                font-weight: bold;
-                padding: 10px;
-            }
-            legend {
-                font-weight: bold;
+
+            #random-arrays {
+                font-size: 19px;
             }
         </style>
 
@@ -64,7 +72,7 @@
 
                 <label>
                     Enter High Number
-                    <input type="text" id="high-num" name="high-num" />
+                    <input type="number" id="high-num" name="high-num" />
                 </label>
 
                 <button id="submit">Sort Me and Give Me Primes!</button>
@@ -112,7 +120,7 @@
                 }
 
                 function sortIt(low,high) {
-                    // if the user accidentally enters the high ber into the low number
+                    // if the user accidentally enters the high number into the low number
                     // box, or vice versa, flip the numbers
                     if(low > high) {
                         var placeHolder = low;
@@ -121,13 +129,13 @@
                     }
 
                     // get the difference between the low and high numbers,
-                    // which will determine the length of the array (+1 to allow
+                    // which will determine the length of the array +1 to allow
                     // for the top number itself
                     var delta = high - low + 1,
                     randomArray = [];
 
                     // loop through the delta and get all of the random numbers,
-                    // boosting each number by the low so that we're getting
+                    // boosting each number by the low number so that we're getting
                     // the exact range specified by the user input
                     while(randomArray.length < Number(delta)){
                         var randomArrayItem = Math.floor(Math.random() * delta);
@@ -212,11 +220,11 @@
                 }
             }
 
+            // run this program on the page
             var doronsBubbleSort = new superSorter();
             $("#submit").on('click', function(){
                 doronsBubbleSort.submitNums();
             });
-
         </script>
 
     </body>
